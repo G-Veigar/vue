@@ -21,6 +21,7 @@ Vue.prototype.$mount = function (
 ): Component {
   el = el && query(el)
 
+  // TAG: vue无法挂载到body，html
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
     process.env.NODE_ENV !== 'production' && warn(
@@ -30,6 +31,7 @@ Vue.prototype.$mount = function (
   }
 
   const options = this.$options
+  // TAG: 构建render的优先级：render() > template > el
   // resolve template/el and convert to render function
   if (!options.render) {
     let template = options.template
@@ -46,6 +48,7 @@ Vue.prototype.$mount = function (
           }
         }
       } else if (template.nodeType) {
+        // QS: shadow dom也可以？是否有场景？
         template = template.innerHTML
       } else {
         if (process.env.NODE_ENV !== 'production') {

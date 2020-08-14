@@ -52,10 +52,12 @@ export function initMixin (Vue: Class<Component>) {
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
+    // TAG: 生命周期：beforeCreate
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
     initState(vm)
     initProvide(vm) // resolve provide after data/props
+    // TAG: 生命周期：created
     callHook(vm, 'created')
 
     /* istanbul ignore if */

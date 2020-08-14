@@ -56,6 +56,7 @@ export function initLifecycle (vm: Component) {
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
+  // TAG: Vue.prototype._update: 对比vnode更新dom，核心是调用vm.__patch__
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -138,6 +139,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+// TAG: $mount的核心函数
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -164,6 +166,7 @@ export function mountComponent (
       }
     }
   }
+  // TAG: 生命周期：beforeMount
   callHook(vm, 'beforeMount')
 
   let updateComponent
@@ -194,9 +197,11 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // TAG: 渲染函数的依赖收集在这里触发
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
+        // TAG: 生命周期：beforeUpdate
         callHook(vm, 'beforeUpdate')
       }
     }
@@ -207,6 +212,7 @@ export function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true
+    // TAG: 生命周期：mounted
     callHook(vm, 'mounted')
   }
   return vm
